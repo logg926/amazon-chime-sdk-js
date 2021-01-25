@@ -52,6 +52,11 @@ import {
 
 import CircularCut from './videofilter/CircularCut';
 import EmojifyVideoFrameProcessor from './videofilter/EmojifyVideoFrameProcessor';
+import SegmentationProcessor from './videofilter/SegmentationProcessor';
+import {
+  loadBodyPixDependency,
+  platformCanSupportBodyPixWithoutDegradation,
+} from './videofilter/SegmentationUtil';
 import WebRTCStatsCollector from './webrtcstatscollector/WebRTCStatsCollector';
 
 const SHOULD_DIE_ON_FATALS = (() => {
@@ -119,7 +124,7 @@ const VOICE_FOCUS_SPEC = {
   paths: VOICE_FOCUS_PATHS,
 };
 
-type VideoFilterName = 'Emojify' | 'CircularCut' | 'NoOp' | 'None';
+type VideoFilterName = 'Emojify' | 'CircularCut' | 'NoOp' | 'None' | 'Segmentation';
 
 const VIDEO_FILTERS: VideoFilterName[] = ['Emojify', 'CircularCut', 'NoOp'];
 
@@ -1588,6 +1593,16 @@ export class DemoMeetingApp
       this.enableUnifiedPlanForChromiumBasedBrowsers
     ) {
       filters = filters.concat(VIDEO_FILTERS);
+
+      if (platformCanSupportBodyPixWithoutDegradation(this.defaultBrowserBehaviour)) {
+        try {
+          await loadBodyPixDependency();
+          filters.push('Segmentation');
+        } catch (error) {
+          fatal(error);
+          this.log('failed to load segmentation dependencies', error);
+        }
+      }
     }
 
     this.populateInMeetingDeviceList(
@@ -2028,6 +2043,10 @@ export class DemoMeetingApp
 
     if (videoFilter === 'NoOp') {
       return new NoOpVideoFrameProcessor();
+    }
+
+    if (videoFilter === 'Segmentation') {
+      return new SegmentationProcessor();
     }
 
     return null;

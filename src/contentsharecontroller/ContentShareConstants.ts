@@ -3,7 +3,6 @@
 
 enum ContentShareConstants {
   Modality = '#content',
-  ModalityViewer = "#contentViewer"
 }
 
 export default ContentShareConstants;

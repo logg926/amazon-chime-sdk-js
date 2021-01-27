@@ -8,8 +8,6 @@ export default class DefaultModality implements Modality {
   private static MODALITY_SEPARATOR = ContentShareConstants.Modality[0];
 
   static MODALITY_CONTENT = ContentShareConstants.Modality.substr(1);
-  static MODALITY_CONTENTVIEWER = ContentShareConstants.ModalityViewer.substr(1);
-
 
   constructor(private _id: string) {}
 
@@ -36,7 +34,7 @@ export default class DefaultModality implements Modality {
   }
 
   hasModality(modality: string): boolean {
-    return modality !== '' && this.modality().includes(modality);
+    return modality !== '' && this.modality() === modality;
   }
 
   withModality(modality: string): Modality {

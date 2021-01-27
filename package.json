@@ -17,6 +17,7 @@
     "lint": "eslint src test --ext .ts,.tsx,.js --fix",
     "tsc:guides": "tsc --build guides/tsconfig.json",
     "tsc:src": "tsc --build tsconfig.json",
+    "mybuild": "npm run build && cp -R ./build ../rehertz_mvp/amazon-chime-sdk-js",
     "build": "npm install && node script/barrelize.js && node script/generate-version.js && npm run tsc:src && npm run tsc:guides && npm run copy",
     "prebuild:release": "node script/check-voice-focus-version.js && script/prebuild",
     "build:release": "npm run build && npm run lint && npm run check && npm run doc && npm run test:retry",

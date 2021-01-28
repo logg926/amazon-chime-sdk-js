@@ -18,7 +18,7 @@ export default class DefaultAudioMixController implements AudioMixController {
   private audioStream: MediaStream | null = null;
   private browserBehavior: BrowserBehavior = new DefaultBrowserBehavior();
 
-  constructor(private logger?: Logger) {}
+  constructor(private logger?: Logger) { }
 
   async bindAudioElement(element: HTMLAudioElement): Promise<void> {
     if (!element) {
@@ -70,6 +70,14 @@ export default class DefaultAudioMixController implements AudioMixController {
     this.audioDevice = device;
     return this.bindAudioMix();
   }
+  audioOutputStream: MediaStream | null
+  startMuteAudioOutputFromChime() {
+    this.audioStream.getAudioTracks().forEach((track) => track.enabled = false)
+  }
+
+  stopMuteAudioOutputFromChime() {
+    this.audioStream.getAudioTracks().forEach((track) => track.enabled = true)
+  }
 
   private async bindAudioMix(): Promise<void> {
     if (!this.audioElement) {
@@ -78,6 +86,7 @@ export default class DefaultAudioMixController implements AudioMixController {
 
     if (this.audioStream) {
       this.audioElement.srcObject = this.audioStream;
+      this.audioOutputStream = this.audioStream
     }
 
     // In usual operation, the output device is undefined, and so is the element

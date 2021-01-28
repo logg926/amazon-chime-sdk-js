@@ -119,4 +119,7 @@ export default interface AudioVideoController extends AudioVideoControllerFacade
    * Returns the [[EventController]] for this audio-video controller.
    */
   readonly eventController?: EventController;
+
+
+  readonly _audioMixController: AudioMixController;
 }

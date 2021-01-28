@@ -87,7 +87,7 @@ export default class DefaultAudioVideoController
   private _videoTileController: VideoTileController;
   private _mediaStreamBroker: MediaStreamBroker;
   private _reconnectController: ReconnectController;
-  private _audioMixController: AudioMixController;
+  _audioMixController: AudioMixController;
   private _eventController: EventController;
   private _audioProfile: AudioProfile = new AudioProfile();
 
@@ -364,13 +364,13 @@ export default class DefaultAudioVideoController
               new SubscribeAndReceiveSubscribeAckTask(this.meetingSessionContext),
               this.meetingSessionContext.meetingSessionConfiguration.attendeePresenceTimeoutMs > 0
                 ? new TimeoutTask(
-                    this.logger,
-                    new ParallelGroupTask(this.logger, 'FinalizeConnection', [
-                      new WaitForAttendeePresenceTask(this.meetingSessionContext),
-                      new SetRemoteDescriptionTask(this.meetingSessionContext),
-                    ]),
-                    this.meetingSessionContext.meetingSessionConfiguration.attendeePresenceTimeoutMs
-                  )
+                  this.logger,
+                  new ParallelGroupTask(this.logger, 'FinalizeConnection', [
+                    new WaitForAttendeePresenceTask(this.meetingSessionContext),
+                    new SetRemoteDescriptionTask(this.meetingSessionContext),
+                  ]),
+                  this.meetingSessionContext.meetingSessionConfiguration.attendeePresenceTimeoutMs
+                )
                 : new SetRemoteDescriptionTask(this.meetingSessionContext),
             ]),
           ]),
@@ -813,14 +813,12 @@ export default class DefaultAudioVideoController
         const willRetry = this.reconnect(status, error);
         if (willRetry) {
           this.logger.warn(
-            `will retry due to status code ${MeetingSessionStatusCode[status.statusCode()]}${
-              error ? ` and error: ${error.message}` : ``
+            `will retry due to status code ${MeetingSessionStatusCode[status.statusCode()]}${error ? ` and error: ${error.message}` : ``
             }`
           );
         } else {
           this.logger.error(
-            `failed with status code ${MeetingSessionStatusCode[status.statusCode()]}${
-              error ? ` and error: ${error.message}` : ``
+            `failed with status code ${MeetingSessionStatusCode[status.statusCode()]}${error ? ` and error: ${error.message}` : ``
             }`
           );
         }

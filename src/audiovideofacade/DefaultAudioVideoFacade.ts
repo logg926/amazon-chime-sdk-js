@@ -31,7 +31,7 @@ export default class DefaultAudioVideoFacade implements AudioVideoFacade {
     private audioMixController: AudioMixController,
     private deviceController: DeviceController,
     private contentShareController: ContentShareController
-  ) {}
+  ) { }
 
   addObserver(observer: AudioVideoObserver): void {
     this.audioVideoController.addObserver(observer);
@@ -106,6 +106,14 @@ export default class DefaultAudioVideoFacade implements AudioVideoFacade {
     this.trace('removeLocalVideoTile');
   }
 
+
+  startMuteAudioOutputFromChime() {
+    this.audioMixController.startMuteAudioOutputFromChime()
+  }
+
+  stopMuteAudioOutputFromChime() {
+    this.audioMixController.stopMuteAudioOutputFromChime()
+  }
   getLocalVideoTile(): VideoTile | null {
     const result = this.videoTileController.getLocalVideoTile();
     this.trace('getLocalVideoTile');
